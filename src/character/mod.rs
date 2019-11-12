@@ -1,4 +1,5 @@
 #![allow(proc_macro_derive_resolution_fallback)]
+
 use super::schema::character;
 
 pub mod handler;

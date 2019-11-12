@@ -1,7 +1,12 @@
 #![allow(proc_macro_derive_resolution_fallback)]
-use super::schema::skill;
+
 use diesel;
+use super::schema::skill;
 use super::character::Character;
+
+pub mod handler;
+pub mod router;
+pub mod repository;
 
 pub enum Recover {
     Short,
@@ -9,7 +14,7 @@ pub enum Recover {
     Unlimited,
 }
 
-#[derive(Identifiable, Queryable, Associations, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, Insertable, Queryable, AsChangeset, Identifiable, Associations)]
 #[belongs_to(Character)]
 #[table_name = "skill"]
 pub struct Skill {
