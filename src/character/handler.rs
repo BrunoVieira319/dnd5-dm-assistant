@@ -1,6 +1,5 @@
 use diesel::result::Error;
 use rocket::http::Status;
-use rocket::response::status;
 use rocket_contrib::json::Json;
 
 use crate::character;
@@ -33,4 +32,17 @@ pub fn find_by_id(id: i32, connection: Connection) -> Result<Json<Character>, St
     character::repository::find_by_id(id, &connection)
         .map(|character| Json(character))
         .map_err(|err| error_status(err))
+}
+
+#[put("/<id>/hp/<expr>")]
+pub fn change_hp(id:i32, expr:String, connection: Connection) -> Result<Json<Character>, Status> {
+    match character::repository::find_by_id(id, &connection) {
+        Ok(mut character) => {
+            character.change_hp(&expr);
+            character::repository::update(&character, &connection)
+                .map(|_rows| Json(character))
+                .map_err(|err| error_status(err))
+        },
+        Err(err) => Result::Err(error_status(err))
+    }
 }

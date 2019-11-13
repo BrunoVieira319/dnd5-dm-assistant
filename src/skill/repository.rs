@@ -9,7 +9,7 @@ pub fn save(skill: Skill, connection: &MysqlConnection) -> QueryResult<Skill> {
     match diesel::insert_into(skill::table)
         .values(skill)
         .execute(connection) {
-        Ok(rows) => fetch_last_inserted(connection),
+        Ok(_rows) => fetch_last_inserted(connection),
         Err(err) => Err(err),
     }
 }

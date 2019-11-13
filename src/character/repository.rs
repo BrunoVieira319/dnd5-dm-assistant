@@ -9,7 +9,7 @@ pub fn save(character: Character, connection: &MysqlConnection) -> QueryResult<C
     match diesel::insert_into(character::table)
         .values(character)
         .execute(connection) {
-        Ok(rows) => fetch_last_inserted(connection),
+        Ok(_rows) => fetch_last_inserted(connection),
         Err(err) => return Err(err)
     }
 }
@@ -27,4 +27,10 @@ pub fn find_all(connection: &MysqlConnection) -> QueryResult<Vec<Character>> {
 pub fn find_by_id(id: i32, connection: &MysqlConnection) -> QueryResult<Character> {
     character::table.find(id)
         .first(connection)
+}
+
+pub fn update(character: &Character, connection: &MysqlConnection) -> QueryResult<usize> {
+    diesel::update(character)
+        .set(character)
+        .execute(connection)
 }

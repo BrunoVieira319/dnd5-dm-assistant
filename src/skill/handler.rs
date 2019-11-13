@@ -1,6 +1,5 @@
 use diesel::result::Error;
 use rocket::http::Status;
-use rocket::response::status;
 use rocket_contrib::json::Json;
 
 use crate::skill;

@@ -1,6 +1,5 @@
 #![allow(proc_macro_derive_resolution_fallback)]
 
-use diesel;
 use super::schema::skill;
 use super::character::Character;
 

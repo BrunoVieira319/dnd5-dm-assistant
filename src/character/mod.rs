@@ -1,5 +1,7 @@
 #![allow(proc_macro_derive_resolution_fallback)]
 
+use std::cmp::{max, min};
+
 use super::schema::character;
 
 pub mod handler;
@@ -58,5 +60,16 @@ impl Character {
             current_hp: character.max_hp,
             hit_dice: character.level,
         }
+    }
+
+    fn change_hp(&mut self, expr: &str) {
+        let updated_hp = if expr.starts_with("+") {
+            let heal = expr[1..].parse::<u32>().unwrap_or(0);
+            min(self.current_hp + heal as i32, self.max_hp)
+        } else {
+            let damage  = expr.parse::<u32>().unwrap_or(0);
+            max(self.current_hp - damage as i32, 0)
+        };
+        self.current_hp = updated_hp;
     }
 }
