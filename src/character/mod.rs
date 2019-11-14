@@ -3,6 +3,7 @@
 use std::cmp::{max, min};
 
 use super::schema::character;
+use crate::skill::Skill;
 
 pub mod handler;
 pub mod router;
@@ -24,6 +25,12 @@ pub enum CharacterClass {
 }
 
 #[derive(Serialize, Deserialize)]
+pub struct CharacterNotes {
+    pub hit_dice: i32,
+    pub skills: Vec<Skill>
+}
+
+#[derive(Serialize, Deserialize)]
 pub struct CharacterToSave {
     pub character_name: String,
     pub character_class: String,
@@ -34,7 +41,7 @@ pub struct CharacterToSave {
 }
 
 #[table_name = "character"]
-#[derive(Serialize, Deserialize, Insertable, Queryable, AsChangeset, Identifiable)]
+#[derive(Serialize, Deserialize, Insertable, Queryable, AsChangeset, Identifiable, Associations)]
 pub struct Character {
     pub id: Option<i32>,
     pub character_name: String,
@@ -59,6 +66,13 @@ impl Character {
             max_hp: character.max_hp,
             current_hp: character.max_hp,
             hit_dice: character.level,
+        }
+    }
+
+    fn notes(hit_dice: i32, skills: Vec<Skill>) -> CharacterNotes {
+        CharacterNotes {
+            hit_dice,
+            skills
         }
     }
 

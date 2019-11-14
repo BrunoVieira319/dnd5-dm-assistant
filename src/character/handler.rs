@@ -3,7 +3,8 @@ use rocket::http::Status;
 use rocket_contrib::json::Json;
 
 use crate::character;
-use crate::character::{Character, CharacterToSave};
+use crate::character::{Character, CharacterNotes, CharacterToSave};
+use crate::character::repository::find_character_notes;
 use crate::connection::Connection;
 
 fn error_status(error: Error) -> Status {
@@ -35,14 +36,21 @@ pub fn find_by_id(id: i32, connection: Connection) -> Result<Json<Character>, St
 }
 
 #[put("/<id>/hp/<expr>")]
-pub fn change_hp(id:i32, expr:String, connection: Connection) -> Result<Json<Character>, Status> {
+pub fn change_hp(id: i32, expr: String, connection: Connection) -> Result<Json<Character>, Status> {
     match character::repository::find_by_id(id, &connection) {
         Ok(mut character) => {
             character.change_hp(&expr);
             character::repository::update(&character, &connection)
                 .map(|_rows| Json(character))
                 .map_err(|err| error_status(err))
-        },
+        }
         Err(err) => Result::Err(error_status(err))
     }
+}
+
+#[get("/<id>/notes")]
+pub fn get_character_notes(id: i32, connection: Connection) -> Result<Json<CharacterNotes>, Status> {
+    find_character_notes(id, &connection)
+        .map(|notes| Json(notes))
+        .map_err(|err| error_status(err))
 }
