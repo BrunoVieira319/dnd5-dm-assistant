@@ -33,3 +33,9 @@ pub fn find_by_character_id(id: i32, connection: &MysqlConnection) -> QueryResul
     skill::table.filter(skill::character_id.eq(id))
         .load::<Skill>(connection)
 }
+
+pub fn update(skill: &Skill, connection: &MysqlConnection) -> QueryResult<usize> {
+    diesel::update(skill)
+        .set(skill)
+        .execute(connection)
+}
