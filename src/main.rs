@@ -14,10 +14,12 @@ mod schema;
 mod connection;
 mod character;
 mod skill;
+mod spell_slot;
 
 fn main() {
     let (skill_endpoint, skill_routes) = skill::router::get_routes();
     let (character_endpoint, character_routes) = character::router::get_routes();
+    let (ss_endpoint, ss_routes) = spell_slot::router::get_routes();
 
     let cors = rocket_cors::CorsOptions::default().to_cors().unwrap();
 
@@ -26,5 +28,6 @@ fn main() {
         .attach(cors)
         .mount(&skill_endpoint, skill_routes)
         .mount(&character_endpoint, character_routes)
+        .mount(&ss_endpoint, ss_routes)
         .launch();
 }

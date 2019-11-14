@@ -35,10 +35,10 @@ CREATE TABLE `skill`
 
 CREATE TABLE `spell_slot`
 (
-    `id`               INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    `character_id`     INT(11)             NOT NULL,
-    `level`            INT(1)              NOT NULL,
-    `current_quantity` INT(1)              NOT NULL,
-    `max_quantity`     INT(1)              NOT NULL,
+    `id`            INT(11) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    `character_id`  INT(11)             NOT NULL,
+    `level`         INT(1)              NOT NULL,
+    `current_slots` INT(1)              NOT NULL,
+    `max_slots`     INT(1)              NOT NULL,
     FOREIGN KEY (`character_id`) REFERENCES `character` (`id`)
 );

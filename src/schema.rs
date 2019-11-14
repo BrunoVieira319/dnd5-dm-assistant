@@ -38,8 +38,8 @@ table! {
         id -> Nullable<Integer>,
         character_id -> Integer,
         level -> Integer,
-        current_quantity -> Integer,
-        max_quantity -> Integer,
+        current_slots -> Integer,
+        max_slots -> Integer,
     }
 }
 
