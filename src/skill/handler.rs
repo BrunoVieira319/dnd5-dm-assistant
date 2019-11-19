@@ -23,7 +23,7 @@ pub fn save(skill: Json<Skill>, connection: Connection) -> Result<Json<Skill>, S
 #[get("/")]
 pub fn find_all(connection: Connection) -> Result<Json<Vec<Skill>>, Status> {
     skill::repository::find_all(&connection)
-        .map(|skill| Json(skill))
+        .map(|skills| Json(skills))
         .map_err(|err| error_status(err))
 }
 

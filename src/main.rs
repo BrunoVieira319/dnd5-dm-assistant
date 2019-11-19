@@ -6,6 +6,7 @@ extern crate rocket_cors;
 extern crate diesel;
 extern crate r2d2;
 extern crate r2d2_diesel;
+#[macro_use]
 extern crate rocket_contrib;
 #[macro_use]
 extern crate serde_derive;

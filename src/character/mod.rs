@@ -4,6 +4,7 @@ use std::cmp::{max, min};
 
 use super::schema::character;
 use crate::skill::Skill;
+use crate::spell_slot::SpellSlot;
 
 pub mod handler;
 pub mod router;
@@ -27,7 +28,8 @@ pub enum CharacterClass {
 #[derive(Serialize, Deserialize)]
 pub struct CharacterNotes {
     pub hit_dice: i32,
-    pub skills: Vec<Skill>
+    pub skills: Vec<Skill>,
+    pub spell_slots: Vec<SpellSlot>
 }
 
 #[derive(Serialize, Deserialize)]
@@ -69,10 +71,11 @@ impl Character {
         }
     }
 
-    fn notes(hit_dice: i32, skills: Vec<Skill>) -> CharacterNotes {
+    fn notes(hit_dice: i32, skills: Vec<Skill>, spell_slots: Vec<SpellSlot>) -> CharacterNotes {
         CharacterNotes {
             hit_dice,
-            skills
+            skills,
+            spell_slots
         }
     }
 

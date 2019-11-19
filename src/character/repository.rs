@@ -7,6 +7,7 @@ use crate::character::CharacterNotes;
 use crate::schema::character;
 
 use super::Character;
+use crate::{spell_slot, skill};
 
 pub fn save(character: Character, connection: &MysqlConnection) -> QueryResult<Character> {
     match diesel::insert_into(character::table)
@@ -34,8 +35,10 @@ pub fn find_by_id(id: i32, connection: &MysqlConnection) -> QueryResult<Characte
 
 pub fn find_character_notes(id: i32, connection: &MysqlConnection) -> QueryResult<CharacterNotes> {
     let character = find_by_id(id, connection)?;
-    let skills = crate::skill::repository::find_by_character_id(character.id.unwrap(), connection)?;
-    Ok(Character::notes(character.hit_dice, skills))
+    let skills = skill::repository::find_by_character_id(character.id.unwrap(), connection)?;
+    let spell_slots = spell_slot::repository::find_by_character_id(character.id.unwrap(), connection)?;
+
+    Ok(Character::notes(character.hit_dice, skills, spell_slots))
 }
 
 pub fn update(character: &Character, connection: &MysqlConnection) -> QueryResult<usize> {
