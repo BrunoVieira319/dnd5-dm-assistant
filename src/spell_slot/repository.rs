@@ -2,10 +2,12 @@
 
 use diesel;
 use diesel::prelude::*;
+
 use crate::schema::spell_slot;
+
 use super::SpellSlot;
 
-pub fn save(spell_slot: SpellSlot, connection: &MysqlConnection) -> QueryResult<SpellSlot> {
+pub fn save(spell_slot: &SpellSlot, connection: &MysqlConnection) -> QueryResult<SpellSlot> {
     match diesel::insert_into(spell_slot::table)
         .values(spell_slot)
         .execute(connection) {

@@ -8,12 +8,13 @@ pub mod router;
 
 #[derive(Serialize, Deserialize)]
 pub struct SpellSlotToSave {
+    pub id: Option<i32>,
     pub character_id: i32,
     pub level: i32,
     pub max_slots: i32,
 }
 
-#[derive(Serialize, Deserialize, Insertable, Queryable, AsChangeset, Identifiable, Associations)]
+#[derive(Serialize, Deserialize, Insertable, Queryable, AsChangeset, Identifiable, Associations, Copy, Clone)]
 #[table_name = "spell_slot"]
 pub struct SpellSlot {
     pub id: Option<i32>,
@@ -24,7 +25,7 @@ pub struct SpellSlot {
 }
 
 impl SpellSlot {
-    fn from_spell_slot_to_save(spell_slot: SpellSlotToSave) -> SpellSlot {
+    fn from_spell_slot_to_save(spell_slot: &SpellSlotToSave) -> SpellSlot {
         SpellSlot {
             id: None,
             character_id: spell_slot.character_id,
