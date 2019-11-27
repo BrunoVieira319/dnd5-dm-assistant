@@ -31,6 +31,11 @@ pub fn find_by_character_id(id: i32, connection: &MysqlConnection) -> QueryResul
         .load::<SpellSlot>(connection)
 }
 
+pub fn find_by_character_id_and_level (id: i32, level: i32, connection: &MysqlConnection) -> QueryResult<SpellSlot> {
+    spell_slot::table.filter(spell_slot::character_id.eq(id).and(spell_slot::level.eq(level)))
+        .first(connection)
+}
+
 pub fn update(spell_slot: &SpellSlot, connection: &MysqlConnection) -> QueryResult<usize> {
     diesel::update(spell_slot)
         .set(spell_slot)

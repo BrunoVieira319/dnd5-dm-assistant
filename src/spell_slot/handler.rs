@@ -19,18 +19,20 @@ fn error_status(error: Error) -> Status {
 pub fn save(ss_to_save: Json<SpellSlotToSave>, connection: Connection) -> Result<Json<SpellSlot>, Status> {
     let mut spell_slot = SpellSlot::from_spell_slot_to_save(&ss_to_save.into_inner());
 
-    let spell_slots = spell_slot::repository::find_by_character_id(spell_slot.character_id, &connection)
-        .map_err(|err| error_status(err))?;
-
-    match spell_slots.iter()
-        .find(|existing_ss| spell_slot.level == existing_ss.level) {
-        None => spell_slot::repository::save(&spell_slot, &connection),
-        Some(existing_ss) => {
-            spell_slot.id = existing_ss.id;
+    let ss_found = spell_slot::repository::find_by_character_id_and_level(spell_slot.character_id, spell_slot.level, &connection);
+    let result = match ss_found {
+        Ok(ss) => {
+            spell_slot.id = ss.id;
             spell_slot::repository::update(&spell_slot, &connection)
                 .map(|_rows| spell_slot)
         }
-    }   .map(|_rows| Json(spell_slot))
+        Err(err) => match err {
+            Error::NotFound => spell_slot::repository::save(&spell_slot, &connection),
+            other_errors => Err(other_errors)
+        }
+    };
+
+    result.map(|ss_saved| Json(ss_saved))
         .map_err(|err| error_status(err))
 }
 
